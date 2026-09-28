@@ -1,0 +1,11 @@
+/node_modules
+/.next
+/out
+/build
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+.env*
+# Nhật ký chạy server (nohup/npm start) — chỉ là tệp tạm khi kiểm thử
+server-*.log
+nohup.out
