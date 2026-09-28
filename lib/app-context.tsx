@@ -42,6 +42,7 @@ type AppContextValue = {
   accountHeading: string;
   accountStateVisible: boolean;
   verifyPhone: string;
+  openRegister: () => void;
   selectAccountTab: (tab: AccountTab) => void;
   createAccount: (input: RegisterInput) => AuthResult;
   signIn: (phone: string, pass: string) => AuthResult;
@@ -124,6 +125,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
       selectAccountTab(user ? 'verify' : 'login');
     }
   }, [selectAccountTab, user, verified]);
+
+  /**
+   * Nút "Đăng ký" ngoài header: mở trang tài khoản rồi chọn sẵn tab đăng ký.
+   * Không dùng `navigate('account')` vì hàm đó luôn đưa về tab đăng nhập như nút tài khoản.
+   */
+  const openRegister = useCallback(() => {
+    goTo('account');
+    selectAccountTab('register');
+  }, [goTo, selectAccountTab]);
 
   const navigate = useCallback(
     (name: string) => {
@@ -246,6 +256,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           : 'Đăng nhập',
       accountStateVisible,
       verifyPhone: user?.phone || 'Chưa có tài khoản',
+      openRegister,
       selectAccountTab,
       createAccount,
       signIn,
@@ -273,6 +284,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       history,
       navigate,
       navOpen,
+      openRegister,
       payError,
       pendingPayment,
       requestPayment,

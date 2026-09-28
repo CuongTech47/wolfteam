@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { LogIn, Menu, ShieldCheck, Swords, UserRound, Wallet, X } from 'lucide-react';
+import { LogIn, Menu, ShieldCheck, Swords, UserPlus, UserRound, Wallet, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/lib/app-context';
@@ -19,7 +19,8 @@ const NAV_ITEMS: { route: Route; label: string }[] = [
 ];
 
 export function SiteHeader() {
-  const { navigate, route, navOpen, toggleNav, accountLabel, user, verified } = useApp();
+  const { navigate, route, navOpen, toggleNav, accountLabel, user, verified, openRegister } =
+    useApp();
   const accountRef = useRef<HTMLButtonElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const motion = useMotion();
@@ -109,6 +110,16 @@ export function SiteHeader() {
               </button>
             );
           })}
+          {/*
+            Dưới `sm` nút đăng ký ngoài header được thay bằng mục này trong menu mở ra, để header
+            trên điện thoại không bị tràn.
+          */}
+          {!user && (
+            <Button id="registerNav" className="mt-2 sm:hidden" onClick={openRegister}>
+              <UserPlus />
+              Đăng ký
+            </Button>
+          )}
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
@@ -131,6 +142,17 @@ export function SiteHeader() {
             {user ? verified ? <ShieldCheck /> : <UserRound /> : <LogIn />}
             {accountLabel}
           </Button>
+          {/*
+            Nút đăng ký nằm ngoài header, ngay cạnh nút đăng nhập: mở thẳng trang tài khoản ở tab
+            đăng ký. Ẩn khi phiên xem trước đã có tài khoản; dưới `sm` nút này nhường chỗ cho mục
+            "Đăng ký" trong menu mở ra (#registerNav) để header không bị tràn như nút "Nạp tiền".
+          */}
+          {!user && (
+            <Button id="registerTop" className="hidden sm:inline-flex" onClick={openRegister}>
+              <UserPlus />
+              Đăng ký
+            </Button>
+          )}
         </div>
       </div>
     </header>
